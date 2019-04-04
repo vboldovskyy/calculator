@@ -10,18 +10,18 @@ public class Expression {
     public Expression(String exp) {
 
         if (exp.indexOf(Subtraction.SIGN) != -1) {
-            this.operation = new Subtraction();
+            this.operation = Subtraction.getInstance();
         }
         if (exp.indexOf(Addition.SIGN) != -1) {
-            this.operation = new Addition();
+            this.operation = Addition.getInstance();
         }
 
         if (exp.indexOf(Multiplication.SIGN) != -1) {
-            this.operation = new Multiplication();
+            this.operation = Multiplication.getInstance();
         }
 
         if (exp.indexOf(Division.SIGN) != -1) {
-            this.operation = new Division();
+            this.operation = Division.getInstance();
         }
         if (this.operation == null) {
             throw new IllegalArgumentException("you should provide the operation sign");
@@ -67,23 +67,8 @@ public class Expression {
 
 
     public String evaluate() {
-        BigInteger result = this.operation.calculateResult(this.left, this.right);
-        if (this.operation instanceof Division) {
-            BigInteger remainder = ((Division) this.operation).calculateRemainder(this.left, this.right);
+        return this.operation.calculateResult(this.left, this.right, this.isRoman);
 
-
-            if (result.intValue() > 0 && result.intValue() < 4000 && remainder.intValue() != 0 && this.isRoman) {
-                return RomanNumber.arabicToRoman(result.intValue()) + " and the remainder of " +
-                        RomanNumber.arabicToRoman(remainder.intValue());
-            }
-            if (result.intValue() > 0 && result.intValue() < 4000 && this.isRoman)
-                return RomanNumber.arabicToRoman(result.intValue());
-            if (remainder.intValue() != 0)
-                return result.toString() + " and the remainder of " + remainder.toString();
-            return result.toString();
         }
-
-        return (this.isRoman && result.intValue() > 0 && result.intValue() < 4000) ?
-                RomanNumber.arabicToRoman(result.intValue()) : result.toString();
     }
-}
+
